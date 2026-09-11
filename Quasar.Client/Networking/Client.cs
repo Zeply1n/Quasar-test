@@ -10,7 +10,6 @@ using System.Net;
 using System.Net.Security;
 using System.Net.Sockets;
 using System.Security.Authentication;
-using System.Security.Cryptography;
 using System.Security.Cryptography.X509Certificates;
 using System.Threading;
 
@@ -300,15 +299,8 @@ namespace Quasar.Client.Networking
         /// <returns>Returns <value>true</value> when the validation was successful, otherwise <value>false</value>.</returns>
         private bool ValidateServerCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
-#if DEBUG
-            // for debugging don't validate server certificate
-            return true;
-#else
-            var serverCsp = (RSACryptoServiceProvider)_serverCertificate.PublicKey.Key;
-            var connectedCsp = (RSACryptoServiceProvider)new X509Certificate2(certificate).PublicKey.Key;
             // compare the received server certificate with the included server certificate to validate we are connected to the correct server
-            return _serverCertificate.Equals(certificate);
-#endif
+            return certificate != null && _serverCertificate != null && _serverCertificate.Equals(certificate);
         }
 
         private void AsyncReceive(IAsyncResult result)

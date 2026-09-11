@@ -145,7 +145,6 @@ namespace Quasar.Server.Networking
             //if (Settings.ShowToolTip)
             //    client.Send(new GetSystemInfo());
 
-#if !DEBUG
             try
             {
                 var csp = (RSACryptoServiceProvider)ServerCertificate.PublicKey.Key;
@@ -156,9 +155,6 @@ namespace Quasar.Server.Networking
             {
                 return false;
             }
-#else
-            return true;
-#endif
         }
     }
 }
